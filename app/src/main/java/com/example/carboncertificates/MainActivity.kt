@@ -18,6 +18,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.carboncertificates.lib.models.Certificate
 import com.example.carboncertificates.ui.theme.CarbonCertificatesTheme
+import com.example.carboncertificates.ui.theme.CardColor
 import com.example.carboncertificates.ui.viewmodel.CertificatesViewModel
 import com.example.carboncertificates.utils.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,20 +69,17 @@ class MainActivity : ComponentActivity() {
                         is NetworkResult.Loading -> {
                             LoadingSpinner()
                         }
-
                         is NetworkResult.Error -> {
                             ErrorBox(
                                 errorMessage = (viewState.value as NetworkResult.Error).error
                                     ?: "One or more error has occurred"
                             )
                         }
-
                         is NetworkResult.Success<*> -> {
                             val data = (viewState.value as NetworkResult.Success<*>).data as List<Certificate>
                             Log.d(TAG, "onCreate: Data is $data")
                             DisplayCertificate(certificateList = data)
                         }
-
                         NetworkResult.NoInternet -> {
                             ErrorBox(errorMessage = "No Internet Connection")
                         }
@@ -124,7 +124,7 @@ fun Certificate(id: String, originator: String, owner: String) {
             .padding(8.dp)
             .clickable {
                 isFavourite = !isFavourite
-            }
+            }, colors = CardDefaults.cardColors(containerColor = CardColor)
     ) {
         Row {
             Text(
@@ -134,7 +134,7 @@ fun Certificate(id: String, originator: String, owner: String) {
             )
             Text(
                 text = id,
-                modifier = Modifier.padding(top = 8.dp, start = 2.dp),
+                modifier = Modifier.padding(top = 8.dp),
                 fontWeight = FontWeight.ExtraBold,
                 overflow = TextOverflow.Ellipsis
             )
@@ -150,7 +150,7 @@ fun Certificate(id: String, originator: String, owner: String) {
             Text(text = "Originator: ", modifier = Modifier.padding(top = 4.dp, start = 8.dp))
             Text(
                 text = originator,
-                modifier = Modifier.padding(top = 4.dp, start = 8.dp),
+                modifier = Modifier.padding(top = 4.dp),
                 fontWeight = FontWeight.ExtraBold
             )
         }
@@ -158,7 +158,7 @@ fun Certificate(id: String, originator: String, owner: String) {
             Text(text = "Owner: ", modifier = Modifier.padding(top = 4.dp, start = 8.dp))
             Text(
                 text = owner,
-                modifier = Modifier.padding(top = 4.dp, start = 8.dp),
+                modifier = Modifier.padding(top = 4.dp),
                 fontWeight = FontWeight.ExtraBold
             )
         }
@@ -183,8 +183,8 @@ fun LoadingSpinner() {
 @Composable
 fun GreetingPreview() {
     CarbonCertificatesTheme {
-//        Certificate("3876", "Webpoint Jakub Kpupski PL", "Webpoint Jakub Kpupski ES")
+        Certificate("3876", "Webpoint Jakub Kpupski PL", "Webpoint Jakub Kpupski ES")
         //LoadingSpinner()
-        ErrorBox(errorMessage = "One or more error")
+//        ErrorBox(errorMessage = "One or more error")
     }
 }
